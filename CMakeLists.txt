@@ -6,9 +6,9 @@ set(TARGET "forest")
 find_package(Threads REQUIRED)
 
 set(header_files
-${CMAKE_CURRENT_SOURCE_DIR}/include/avltree.h)
+${CMAKE_CURRENT_SOURCE_DIR}/include/avltree.h
 ${CMAKE_CURRENT_SOURCE_DIR}/include/bstree.h
-${CMAKE_CURRENT_SOURCE_DIR}/include/btree.h)
+${CMAKE_CURRENT_SOURCE_DIR}/include/btree.h
 ${CMAKE_CURRENT_SOURCE_DIR}/include/rbtree.h)
 
 include_directories("forest")

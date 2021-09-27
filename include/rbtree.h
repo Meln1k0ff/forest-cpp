@@ -11,45 +11,72 @@ namespace rbtree {
         struct node {
 
             key_t key;     ///< The key of the node
-            enum { red, black } colour;
+            enum { red, black } color;
             std::weak_ptr<node> parent;    ///< The parent of the node
             std::shared_ptr<node> left;    ///< The left child of the node
             std::shared_ptr<node> right;   ///< The right child of the node
             /**
-             * @brief Constructor of a binary search tree node
+             * @brief Constructor of a red black tree node
              */
             node(const key_t key) {
                 this->key = key;
-                this->parent.reset();
+                //this->color = node::color::black;
                 this->left = nullptr;
                 this->right = nullptr;
             }
         };
     
     public:
+        //insertion with balancing
+        bool insert_root(key_t key)
+        {
+            if (this->root != nullptr) {
+                this->root = std::shared_ptr<node>(new node(key));
+                this->root->color = node::color::black;
+            }                            
+            return true;
+        }
+
         bool insert(key_t key) {
-            std::shared_ptr<node> current = root;
+            std::shared_ptr<node> current = std::shared_ptr<node>(new node(key)); //= root; //new node is always red by default            
+            current->color = node::color::red;
+
             std::shared_ptr<node> parent = nullptr;
-            while (current != nullptr)
-            {
-                parent = current;//?
-                if (key > current->key) {
-                    current = current->right;                     
-                } else if (key < current->key) {
-                    current = current->left;
-                } else {
-                    return false;
-                }               
+            std::shared_ptr<node> uncle;
+            std::shared_ptr<node> sibling;
+            //current->parent = nullptr for root
+            //resolving here all cases
+            //rebalancing
+            while (current->parent->color == node::color::red) {
+                //how to mark all cases better ?
+                if (current->parent == current->parent->parent->right) {
+                    // uncle
+                    if (uncle->color == node::color::red)
+                    {
+                        
+                    }
+                }
             }
+            // while (current != nullptr)
+            // {
+            //     parent = current;//?
+            //     if (key > current->key) {
+            //         current = current->right;                     
+            //     } else if (key < current->key) {
+            //         current = current->left;
+            //     } else {
+            //         return false;
+            //     }               
+            // }
             current = std::make_shared<node>(key); //create a temp pointer for a current
-            current->parent = parent;
-            if(parent == nullptr) {
-                root = current;
-            } else if (current->key > parent->key) {
-                parent->right = current;
-            } else if (current->key < parent->key) {
-                parent->left = current;
-            }
+            // current->parent = parent;
+            // if(parent == nullptr) {
+            //     root = current;
+            // } else if (current->key > parent->key) {
+            //     parent->right = current;
+            // } else if (current->key < parent->key) {
+            //     parent->left = current;
+            // }
         }
 
         std::unique_ptr<node> find(key_t key) {
@@ -136,7 +163,8 @@ namespace rbtree {
 
         void rotateLeft(std::unique_ptr<node> root, std::shared_ptr<node> pt) {
             node *pt_right = pt->right;
-  
+            //std::copy();
+
             pt->right = pt_right->left;
   
             if (pt->right != NULL)
@@ -163,7 +191,8 @@ namespace rbtree {
 
 
     private:
-        std::shared_ptr<node> root;    
+        std::shared_ptr<node> root;
+        std::stack<node> tree_stack;
     };
 }
 }
